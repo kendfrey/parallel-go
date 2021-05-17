@@ -1,20 +1,21 @@
 import { Room, Client } from "colyseus";
+import { GameState } from "./GameState";
 
-export class GameRoom extends Room
+export class GameRoom extends Room<GameState>
 {
 	onCreate(options: any)
 	{
-		console.log("room created", this.roomId);
+		this.setState(new GameState());
+		this.onMessage("setstate", (client, message) => this.state.state = message);
 	}
 
 	onJoin(client: Client, options: any, auth: any)
 	{
-		client.send("greeting", { text: "Hello, World!" });
-		console.log("client joined", options.nick, client.id);
+		
 	}
 
 	onLeave(client: Client, consented: boolean)
 	{
-		console.log("client left", client.id);
+		
 	}
 }

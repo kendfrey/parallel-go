@@ -6,7 +6,20 @@
 	<link rel="stylesheet" href="index.css">
 </head>
 <body>
-	Hello, World!
+	<div id="join">
+		<span>Nickname:</span>
+		<input id="nick" value="anonymous">
+		<button id="newgame">New Game</button>
+		<span>Game ID:</span>
+		<input id="gameid">
+		<button id="joingame">Join</button>
+	</div>
+	<div id="game" style="visibility: collapse;">
+		<span id="state"></span>
+		<span>New State:</span>
+		<input id="newstate">
+		<button id="setstate">Set</button>
+	</div>
 	<script src="colyseus.js"></script>
 	<script src="index.js"></script>
 </body>
