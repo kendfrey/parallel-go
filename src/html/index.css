@@ -1,36 +1,15 @@
-#join
+button
 {
-	display: flex;
-	flex-direction: column;
-	width: 200px;
+	width: 100px;
+}
+
+#join, #game
+{
+	width: fit-content;
 	margin: auto;
 }
 
-#join > *
+#join > *, #game > *
 {
 	margin-top: 10px;
-}
-
-#join > input
-{
-	margin-top: 0px;
-}
-
-#game
-{
-	display: flex;
-	flex-direction: column;
-	width: 200px;
-	margin: auto;
-	margin-top: 50px;
-}
-
-#game > *
-{
-	margin-top: 10px;
-}
-
-#game > input
-{
-	margin-top: 0px;
 }

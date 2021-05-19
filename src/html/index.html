@@ -7,17 +7,18 @@
 </head>
 <body>
 	<div id="join">
-		<span>Nickname:</span>
-		<input id="nick" value="anonymous">
-		<button id="new-game">New Game</button>
-		<span>Game ID:</span>
-		<input id="game-id">
-		<button id="join-game">Join</button>
+		<div><span>Nickname:</span><br>
+		<input id="nick" value="anonymous"></div>
+		<div><button id="new-game">New Game</button></div>
+		<div><span>Game ID:</span><br>
+		<input id="game-id"></div>
+		<div><button id="join-game">Join</button></div>
 	</div>
 	<div id="game" style="display: none;">
 		<div>Game ID: <span id="current-game-id"></span></div>
 		<div>Black: <span id="black-player"></span> <button id="sit-black">Play</button><button id="stand-black">Leave</button></div>
 		<div>White: <span id="white-player"></span> <button id="sit-white">Play</button><button id="stand-white">Leave</button></div>
+		<canvas id="game-canvas"></canvas>
 	</div>
 	<script src="colyseus.js"></script>
 	<script src="index.js"></script>

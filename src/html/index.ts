@@ -11,6 +11,7 @@ const standBlackBtn = document.getElementById("stand-black") as HTMLButtonElemen
 const whitePlayer = document.getElementById("white-player") as HTMLSpanElement;
 const sitWhiteBtn = document.getElementById("sit-white") as HTMLButtonElement;
 const standWhiteBtn = document.getElementById("stand-white") as HTMLButtonElement;
+const gameCanvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 
 newGameBtn.addEventListener("click", onNew);
 joinGameBtn.addEventListener("click", onJoin);
@@ -71,4 +72,47 @@ function update()
 	whitePlayer.textContent = room.state.whitePlayerNick;
 	sitWhiteBtn.style.display = room.state.whitePlayer === undefined ? "" : "none";
 	standWhiteBtn.style.display = room.state.whitePlayer === room.sessionId ? "" : "none";
+
+	drawBoard();
+}
+
+const ctx = gameCanvas.getContext("2d") as CanvasRenderingContext2D;
+const size = 19;
+const stoneSize = 45;
+const stoneOffset = stoneSize * 0.5;
+
+function drawBoard()
+{
+	// fill background
+	gameCanvas.width = size * stoneSize;
+	gameCanvas.height = size * stoneSize;
+	ctx.fillStyle = "#ffdf7f";
+	ctx.fillRect(0, 0, size * stoneSize, size * stoneSize);
+
+	// draw lines
+	ctx.strokeStyle = "black";
+	ctx.beginPath();
+	for (let x = 0; x < size; x++)
+	{
+		ctx.moveTo(x * stoneSize + stoneOffset, stoneOffset - 0.5);
+		ctx.lineTo(x * stoneSize + stoneOffset, (size - 1) * stoneSize + stoneOffset + 0.5);
+	}
+	for (let y = 0; y < size; y++)
+	{
+		ctx.moveTo(stoneOffset - 0.5, y * stoneSize + stoneOffset);
+		ctx.lineTo((size - 1) * stoneSize + stoneOffset + 0.5, y * stoneSize + stoneOffset);
+	}
+	ctx.stroke();
+
+	// draw star points
+	ctx.fillStyle = "black";
+	for (let x = 3; x < size; x += 6)
+	{
+		for (let y = 3; y < size; y += 6)
+		{
+			ctx.beginPath();
+			ctx.ellipse(x * stoneSize + stoneOffset, y * stoneSize + stoneOffset, 3, 3, 0, 0, Math.PI * 2);
+			ctx.fill();
+		}
+	}
 }
