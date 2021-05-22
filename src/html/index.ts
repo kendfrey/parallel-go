@@ -83,6 +83,9 @@ const stoneOffset = stoneSize * 0.5;
 
 function drawBoard()
 {
+	if (room === undefined)
+		return;
+
 	// fill background
 	gameCanvas.width = size * stoneSize;
 	gameCanvas.height = size * stoneSize;
@@ -115,4 +118,33 @@ function drawBoard()
 			ctx.fill();
 		}
 	}
+
+	// draw stones
+	for (let x = 0; x < size; x++)
+	{
+		for (let y = 0; y < size; y++)
+		{
+			switch (room.state.board[y * size + x])
+			{
+				case 1:
+					drawStone("black", x, y);
+					break;
+				case -1:
+					drawStone("white", x, y);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+}
+
+function drawStone(colour: string, x: number, y: number)
+{
+	ctx.strokeStyle = "black";
+	ctx.fillStyle = colour;
+	ctx.beginPath();
+	ctx.ellipse(x * stoneSize + stoneOffset, y * stoneSize + stoneOffset, stoneOffset - 0.5, stoneOffset - 0.5, 0, 0, Math.PI * 2);
+	ctx.fill();
+	ctx.stroke();
 }

@@ -1,4 +1,4 @@
-import { Schema, type } from "@colyseus/schema";
+import { Schema, ArraySchema, type } from "@colyseus/schema";
 
 export class GameState extends Schema
 {
@@ -13,4 +13,7 @@ export class GameState extends Schema
 
 	@type("string")
 	whitePlayerNick?: string;
+
+	@type({ array: "int8" })
+	board = new ArraySchema<number>();
 }

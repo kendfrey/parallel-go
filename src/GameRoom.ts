@@ -1,13 +1,21 @@
 import { Room, Client } from "colyseus";
+import { ArraySchema } from "@colyseus/schema";
+import Board from "@sabaki/go-board";
 import { GameState } from "./GameState";
 
 export class GameRoom extends Room<GameState>
 {
+	private board: Board = Board.fromDimensions(19);
+
 	onCreate(options: any)
 	{
 		this.setState(new GameState());
 		this.onMessage("sit", (c, m) => this.onSit(c, m));
 		this.onMessage("stand", (c, m) => this.onStand(c, m));
+
+		this.board = this.board.makeMove(1, [15, 3]);
+		this.board = this.board.makeMove(-1, [3, 3]);
+		this.updateBoardState();
 	}
 
 	onSit(client: Client, message: string)
@@ -59,5 +67,10 @@ export class GameRoom extends Room<GameState>
 	{
 		this.onStand(client, "black");
 		this.onStand(client, "white");
+	}
+
+	updateBoardState()
+	{
+		this.state.board = new ArraySchema<number>(...this.board.signMap.flat());
 	}
 }
