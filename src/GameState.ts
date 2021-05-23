@@ -14,6 +14,9 @@ export class GameState extends Schema
 	@type("string")
 	whitePlayerNick?: string;
 
-	@type({ array: "int8" })
-	board = new ArraySchema<number>();
+	@type({ array: "uint16" })
+	blackStones = new ArraySchema<number>();
+
+	@type({ array: "uint16" })
+	whiteStones = new ArraySchema<number>();
 }

@@ -120,31 +120,28 @@ function drawBoard()
 	}
 
 	// draw stones
-	for (let x = 0; x < size; x++)
+	for (const position of room.state.blackStones)
 	{
-		for (let y = 0; y < size; y++)
-		{
-			switch (room.state.board[y * size + x])
-			{
-				case 1:
-					drawStone("black", x, y);
-					break;
-				case -1:
-					drawStone("white", x, y);
-					break;
-				default:
-					break;
-			}
-		}
+		drawStone("black", position);
+	}
+	for (const position of room.state.whiteStones)
+	{
+		drawStone("white", position);
 	}
 }
 
-function drawStone(colour: string, x: number, y: number)
+function drawStone(colour: string, position: number)
 {
+	const [x, y] = toVertex(position);
 	ctx.strokeStyle = "black";
 	ctx.fillStyle = colour;
 	ctx.beginPath();
 	ctx.ellipse(x * stoneSize + stoneOffset, y * stoneSize + stoneOffset, stoneOffset - 0.5, stoneOffset - 0.5, 0, 0, Math.PI * 2);
 	ctx.fill();
 	ctx.stroke();
+}
+
+function toVertex(position: number): [number, number]
+{
+	return [position % size, Math.floor(position / size)];
 }

@@ -1,6 +1,6 @@
 import { Room, Client } from "colyseus";
 import { ArraySchema } from "@colyseus/schema";
-import Board from "@sabaki/go-board";
+import Board, { Vertex } from "@sabaki/go-board";
 import { GameState } from "./GameState";
 
 export class GameRoom extends Room<GameState>
@@ -71,6 +71,21 @@ export class GameRoom extends Room<GameState>
 
 	updateBoardState()
 	{
-		this.state.board = new ArraySchema<number>(...this.board.signMap.flat());
+		this.state.blackStones.clear();
+		this.state.whiteStones.clear();
+
+		for (let i = 0; i < this.board.width * this.board.height; i++)
+		{
+			const stone = this.board.get(this.toVertex(i));
+			if (stone === 1)
+				this.state.blackStones.push(i);
+			else if (stone === -1)
+				this.state.whiteStones.push(i);
+		}
+	}
+
+	toVertex(position: number): Vertex
+	{
+		return [position % this.board.width, Math.floor(position / this.board.width)];
 	}
 }
