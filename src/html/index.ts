@@ -95,6 +95,8 @@ function drawBoard()
 	if (room === undefined)
 		return;
 
+	ctx.lineWidth = 1;
+
 	// fill background
 	gameCanvas.width = size * stoneSize;
 	gameCanvas.height = size * stoneSize;
@@ -145,6 +147,14 @@ function drawBoard()
 	{
 		drawStone("#ffffff7f", room.state.white.proposedMove);
 	}
+	if (room.state.black.lastMove !== undefined)
+	{
+		drawMoveMarker("#ffffff", room.state.black.lastMove);
+	}
+	if (room.state.white.lastMove !== undefined)
+	{
+		drawMoveMarker("#000000", room.state.white.lastMove);
+	}
 }
 
 function drawStone(colour: string, position: number)
@@ -155,6 +165,16 @@ function drawStone(colour: string, position: number)
 	ctx.beginPath();
 	ctx.ellipse(x * stoneSize + stoneOffset, y * stoneSize + stoneOffset, stoneOffset - 0.5, stoneOffset - 0.5, 0, 0, Math.PI * 2);
 	ctx.fill();
+	ctx.stroke();
+}
+
+function drawMoveMarker(colour: string, position: number)
+{
+	const [x, y] = toVertex(position);
+	ctx.strokeStyle = colour;
+	ctx.lineWidth = 2;
+	ctx.beginPath();
+	ctx.ellipse(x * stoneSize + stoneOffset, y * stoneSize + stoneOffset, stoneOffset * 0.5, stoneOffset * 0.5, 0, 0, Math.PI * 2);
 	ctx.stroke();
 }
 

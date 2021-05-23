@@ -15,6 +15,9 @@ export class PlayerState extends Schema
 	@filter(filterPlayer)
 	@type("int16")
 	proposedMove?: number;
+	
+	@type("int16")
+	lastMove?: number;
 }
 
 export class GameState extends Schema

@@ -106,6 +106,8 @@ export class GameRoom extends Room<GameState>
 			if (diff !== null && diff.length === 0)
 			{
 				this.board = bwBoard;
+				this.state.black.lastMove = this.state.black.proposedMove;
+				this.state.white.lastMove = this.state.white.proposedMove;
 			}
 			else
 			{
