@@ -19,6 +19,7 @@ sitBlackBtn.addEventListener("click", () => onSitStand("sit", "black"));
 standBlackBtn.addEventListener("click", () => onSitStand("stand", "black"));
 sitWhiteBtn.addEventListener("click", () => onSitStand("sit", "white"));
 standWhiteBtn.addEventListener("click", () => onSitStand("stand", "white"));
+gameCanvas.addEventListener("click", onClick);
 
 const client = new Colyseus.Client();
 
@@ -34,6 +35,14 @@ async function onNew()
 {
 	room = await client.create("game", { nick: nickInput.value });
 	setupRoom(room);
+}
+
+function onClick(e: MouseEvent)
+{
+	if (room === undefined)
+		return;
+
+	room.send("click", fromVertex(Math.floor(e.offsetX / stoneSize), Math.floor(e.offsetY / stoneSize)));
 }
 
 function setupRoom(room: Colyseus.Room)
@@ -144,4 +153,9 @@ function drawStone(colour: string, position: number)
 function toVertex(position: number): [number, number]
 {
 	return [position % size, Math.floor(position / size)];
+}
+
+function fromVertex(x: number, y: number)
+{
+	return y * size + x;
 }

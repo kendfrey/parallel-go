@@ -1,6 +1,5 @@
 import { Room, Client } from "colyseus";
-import { ArraySchema } from "@colyseus/schema";
-import Board, { Vertex } from "@sabaki/go-board";
+import Board, { Sign, Vertex } from "@sabaki/go-board";
 import { GameState } from "./GameState";
 
 export class GameRoom extends Room<GameState>
@@ -12,9 +11,8 @@ export class GameRoom extends Room<GameState>
 		this.setState(new GameState());
 		this.onMessage("sit", (c, m) => this.onSit(c, m));
 		this.onMessage("stand", (c, m) => this.onStand(c, m));
+		this.onMessage("click", (c, m) => this.onClick(c, m));
 
-		this.board = this.board.makeMove(1, [15, 3]);
-		this.board = this.board.makeMove(-1, [3, 3]);
 		this.updateBoardState();
 	}
 
@@ -56,6 +54,24 @@ export class GameRoom extends Room<GameState>
 				this.state.whitePlayerNick = undefined;
 			}
 		}
+	}
+
+	onClick(client: Client, position: number)
+	{
+		let player: Sign;
+		if (client.sessionId === this.state.blackPlayer)
+			player = 1;
+		else if (client.sessionId === this.state.whitePlayer)
+			player = -1;
+		else
+			return;
+
+		try
+		{
+			this.board = this.board.makeMove(player, this.toVertex(position), { preventSuicide: true, preventOverwrite: true });
+			this.updateBoardState();
+		}
+		catch { }
 	}
 
 	onJoin(client: Client, options: any, auth: any)
