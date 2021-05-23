@@ -131,11 +131,19 @@ function drawBoard()
 	// draw stones
 	for (const position of room.state.black.stones)
 	{
-		drawStone("black", position);
+		drawStone("#000000", position);
 	}
 	for (const position of room.state.white.stones)
 	{
-		drawStone("white", position);
+		drawStone("#ffffff", position);
+	}
+	if (room.state.black.proposedMove !== undefined)
+	{
+		drawStone("#0000007f", room.state.black.proposedMove);
+	}
+	if (room.state.white.proposedMove !== undefined)
+	{
+		drawStone("#ffffff7f", room.state.white.proposedMove);
 	}
 }
 

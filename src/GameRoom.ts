@@ -2,6 +2,8 @@ import { Room, Client } from "colyseus";
 import Board, { Sign, Vertex } from "@sabaki/go-board";
 import { GameState } from "./GameState";
 
+const opts = { preventSuicide: true, preventOverwrite: true };
+
 export class GameRoom extends Room<GameState>
 {
 	private board: Board = Board.fromDimensions(19);
@@ -58,20 +60,25 @@ export class GameRoom extends Room<GameState>
 
 	onClick(client: Client, position: number)
 	{
-		let player: Sign;
+		let player: "black" | "white";
 		if (client.sessionId === this.state.black.player)
-			player = 1;
+			player = "black";
 		else if (client.sessionId === this.state.white.player)
-			player = -1;
+			player = "white";
 		else
 			return;
 
 		try
 		{
-			this.board = this.board.makeMove(player, this.toVertex(position), { preventSuicide: true, preventOverwrite: true });
-			this.updateBoardState();
+			this.board.makeMove(player === "black" ? 1 : -1, this.toVertex(position), opts);
+			this.state[player].proposedMove = position;
 		}
-		catch { }
+		catch
+		{
+			this.state[player].proposedMove = undefined;
+		}
+		this.attemptMove();
+		this.updateBoardState();
 	}
 
 	onJoin(client: Client, options: any, auth: any)
@@ -83,6 +90,34 @@ export class GameRoom extends Room<GameState>
 	{
 		this.onStand(client, "black");
 		this.onStand(client, "white");
+	}
+
+	attemptMove()
+	{
+		if (this.state.black.proposedMove === undefined || this.state.white.proposedMove === undefined)
+			return;
+
+		try
+		{
+			const bwBoard = this.board.makeMove(1, this.toVertex(this.state.black.proposedMove), opts).makeMove(-1, this.toVertex(this.state.white.proposedMove), opts);
+			const wbBoard = this.board.makeMove(-1, this.toVertex(this.state.white.proposedMove), opts).makeMove(1, this.toVertex(this.state.black.proposedMove), opts);
+			const diff = bwBoard.diff(wbBoard);
+
+			if (diff !== null && diff.length === 0)
+			{
+				this.board = bwBoard;
+			}
+			else
+			{
+				throw new Error();
+			}
+		}
+		catch (e)
+		{
+			// TODO
+		}
+		this.state.black.proposedMove = undefined;
+		this.state.white.proposedMove = undefined;
 	}
 
 	updateBoardState()

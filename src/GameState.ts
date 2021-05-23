@@ -1,4 +1,5 @@
-import { Schema, ArraySchema, type } from "@colyseus/schema";
+import { Client } from "colyseus";
+import { Schema, ArraySchema, type, filter } from "@colyseus/schema";
 
 export class PlayerState extends Schema
 {
@@ -8,8 +9,12 @@ export class PlayerState extends Schema
 	@type("string")
 	nick?: string;
 
-	@type({ array: "uint16" })
+	@type({ array: "int16" })
 	stones = new ArraySchema<number>();
+
+	@filter(filterPlayer)
+	@type("int16")
+	proposedMove?: number;
 }
 
 export class GameState extends Schema
@@ -19,4 +24,9 @@ export class GameState extends Schema
 
 	@type(PlayerState)
 	white = new PlayerState();
+}
+
+function filterPlayer(this: PlayerState, client: Client, value: any, root: any): boolean
+{
+	return this.player === client.sessionId;
 }
