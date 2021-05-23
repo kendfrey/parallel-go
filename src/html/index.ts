@@ -48,7 +48,7 @@ function onClick(e: MouseEvent)
 function setupRoom(room: Colyseus.Room)
 {
 	room.onStateChange(update);
-	room.onLeave(leave)
+	room.onLeave(onLeave)
 }
 
 function onSitStand(command: string, player: string)
@@ -59,7 +59,7 @@ function onSitStand(command: string, player: string)
 	room.send(command, player);
 }
 
-function leave()
+function onLeave()
 {
 	room = undefined;
 	update();
@@ -75,12 +75,12 @@ function update()
 
 	currentGameId.textContent = room.id;
 
-	blackPlayer.textContent = room.state.blackPlayerNick;
-	sitBlackBtn.style.display = room.state.blackPlayer === undefined ? "" : "none";
-	standBlackBtn.style.display = room.state.blackPlayer === room.sessionId ? "" : "none";
-	whitePlayer.textContent = room.state.whitePlayerNick;
-	sitWhiteBtn.style.display = room.state.whitePlayer === undefined ? "" : "none";
-	standWhiteBtn.style.display = room.state.whitePlayer === room.sessionId ? "" : "none";
+	blackPlayer.textContent = room.state.black.nick;
+	sitBlackBtn.style.display = room.state.black.player === undefined ? "" : "none";
+	standBlackBtn.style.display = room.state.black.player === room.sessionId ? "" : "none";
+	whitePlayer.textContent = room.state.white.nick;
+	sitWhiteBtn.style.display = room.state.white.player === undefined ? "" : "none";
+	standWhiteBtn.style.display = room.state.white.player === room.sessionId ? "" : "none";
 
 	drawBoard();
 }
@@ -129,11 +129,11 @@ function drawBoard()
 	}
 
 	// draw stones
-	for (const position of room.state.blackStones)
+	for (const position of room.state.black.stones)
 	{
 		drawStone("black", position);
 	}
-	for (const position of room.state.whiteStones)
+	for (const position of room.state.white.stones)
 	{
 		drawStone("white", position);
 	}

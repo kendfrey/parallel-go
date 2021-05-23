@@ -20,18 +20,18 @@ export class GameRoom extends Room<GameState>
 	{
 		if (message === "black")
 		{
-			if (this.state.blackPlayer === undefined)
+			if (this.state.black.player === undefined)
 			{
-				this.state.blackPlayer = client.id;
-				this.state.blackPlayerNick = client.userData.nick;
+				this.state.black.player = client.id;
+				this.state.black.nick = client.userData.nick;
 			}
 		}
 		else if (message === "white")
 		{
-			if (this.state.whitePlayer === undefined)
+			if (this.state.white.player === undefined)
 			{
-				this.state.whitePlayer = client.id;
-				this.state.whitePlayerNick = client.userData.nick;
+				this.state.white.player = client.id;
+				this.state.white.nick = client.userData.nick;
 			}
 		}
 	}
@@ -40,18 +40,18 @@ export class GameRoom extends Room<GameState>
 	{
 		if (message === "black")
 		{
-			if (this.state.blackPlayer === client.sessionId)
+			if (this.state.black.player === client.sessionId)
 			{
-				this.state.blackPlayer = undefined;
-				this.state.blackPlayerNick = undefined;
+				this.state.black.player = undefined;
+				this.state.black.nick = undefined;
 			}
 		}
 		else if (message === "white")
 		{
-			if (this.state.whitePlayer === client.sessionId)
+			if (this.state.white.player === client.sessionId)
 			{
-				this.state.whitePlayer = undefined;
-				this.state.whitePlayerNick = undefined;
+				this.state.white.player = undefined;
+				this.state.white.nick = undefined;
 			}
 		}
 	}
@@ -59,9 +59,9 @@ export class GameRoom extends Room<GameState>
 	onClick(client: Client, position: number)
 	{
 		let player: Sign;
-		if (client.sessionId === this.state.blackPlayer)
+		if (client.sessionId === this.state.black.player)
 			player = 1;
-		else if (client.sessionId === this.state.whitePlayer)
+		else if (client.sessionId === this.state.white.player)
 			player = -1;
 		else
 			return;
@@ -87,16 +87,16 @@ export class GameRoom extends Room<GameState>
 
 	updateBoardState()
 	{
-		this.state.blackStones.clear();
-		this.state.whiteStones.clear();
+		this.state.black.stones.clear();
+		this.state.white.stones.clear();
 
 		for (let i = 0; i < this.board.width * this.board.height; i++)
 		{
 			const stone = this.board.get(this.toVertex(i));
 			if (stone === 1)
-				this.state.blackStones.push(i);
+				this.state.black.stones.push(i);
 			else if (stone === -1)
-				this.state.whiteStones.push(i);
+				this.state.white.stones.push(i);
 		}
 	}
 

@@ -1,22 +1,22 @@
 import { Schema, ArraySchema, type } from "@colyseus/schema";
 
-export class GameState extends Schema
+export class PlayerState extends Schema
 {
 	@type("string")
-	blackPlayer?: string;
+	player?: string;
 
 	@type("string")
-	blackPlayerNick?: string;
-
-	@type("string")
-	whitePlayer?: string;
-
-	@type("string")
-	whitePlayerNick?: string;
+	nick?: string;
 
 	@type({ array: "uint16" })
-	blackStones = new ArraySchema<number>();
+	stones = new ArraySchema<number>();
+}
 
-	@type({ array: "uint16" })
-	whiteStones = new ArraySchema<number>();
+export class GameState extends Schema
+{
+	@type(PlayerState)
+	black = new PlayerState();
+
+	@type(PlayerState)
+	white = new PlayerState();
 }
