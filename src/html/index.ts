@@ -142,25 +142,33 @@ function drawBoard()
 	}
 
 	// draw stones
-	for (const position of room.state.black.stones)
+	for (const position of room.state.black.stones.values())
 	{
 		drawStone("#000000", position);
 	}
-	for (const position of room.state.white.stones)
+	for (const position of room.state.white.stones.values())
 	{
 		drawStone("#ffffff", position);
 	}
-	for (const position of room.state.black.bannedMoves)
+	for (const position of room.state.black.bannedMoves.values())
 	{
-		if (room.state.white.bannedMoves.includes(position))
+		if (room.state.white.bannedMoves.has(position))
 			drawBannedMove("#7f7f7f", position);
 		else
 			drawBannedMove("#000000", position);
 	}
-	for (const position of room.state.white.bannedMoves)
+	for (const position of room.state.white.bannedMoves.values())
 	{
-		if (!room.state.black.bannedMoves.includes(position))
+		if (!room.state.black.bannedMoves.has(position))
 			drawBannedMove("#ffffff", position);
+	}
+	for (const position of room.state.black.territory.values())
+	{
+		drawTerritory("#000000", position);
+	}
+	for (const position of room.state.white.territory.values())
+	{
+		drawTerritory("#ffffff", position);
 	}
 	if (room.state.black.proposedMove !== undefined)
 	{
@@ -224,6 +232,20 @@ function drawBannedMove(colour: string, position: number)
 	ctx.lineTo(x0, y0 - 5);
 	ctx.fill();
 	ctx.stroke();
+}
+
+function drawTerritory(colour: string, position: number)
+{
+	const [x, y] = toVertex(position);
+	ctx.fillStyle = colour;
+	ctx.beginPath();
+	const x0 = x * stoneSize + stoneOffset;
+	const y0 = y * stoneSize + stoneOffset;
+	ctx.lineTo(x0 - stoneOffset * 0.5, y0 - stoneOffset * 0.5);
+	ctx.lineTo(x0 + stoneOffset * 0.5, y0 - stoneOffset * 0.5);
+	ctx.lineTo(x0 + stoneOffset * 0.5, y0 + stoneOffset * 0.5);
+	ctx.lineTo(x0 - stoneOffset * 0.5, y0 + stoneOffset * 0.5);
+	ctx.fill();
 }
 
 function toVertex(position: number): [number, number]

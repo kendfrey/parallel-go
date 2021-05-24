@@ -1,5 +1,5 @@
 import { Client } from "colyseus";
-import { Schema, ArraySchema, type, filter } from "@colyseus/schema";
+import { Schema, SetSchema, type, filter } from "@colyseus/schema";
 
 export class PlayerState extends Schema
 {
@@ -9,8 +9,8 @@ export class PlayerState extends Schema
 	@type("string")
 	nick?: string;
 
-	@type({ array: "int16" })
-	stones = new ArraySchema<number>();
+	@type({ set: "int16" })
+	stones = new SetSchema<number>();
 
 	@filter(filterPlayer)
 	@type("int16")
@@ -19,8 +19,11 @@ export class PlayerState extends Schema
 	@type("int16")
 	lastMove?: number;
 
-	@type({ array: "int16" })
-	bannedMoves = new ArraySchema<number>();
+	@type({ set: "int16" })
+	bannedMoves = new SetSchema<number>();
+
+	@type({ set: "int16" })
+	territory = new SetSchema<number>();
 }
 
 export class GameState extends Schema
