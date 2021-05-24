@@ -18,6 +18,9 @@ export class PlayerState extends Schema
 	
 	@type("int16")
 	lastMove?: number;
+
+	@type({ array: "int16" })
+	bannedMoves = new ArraySchema<number>();
 }
 
 export class GameState extends Schema

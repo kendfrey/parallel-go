@@ -150,6 +150,18 @@ function drawBoard()
 	{
 		drawStone("#ffffff", position);
 	}
+	for (const position of room.state.black.bannedMoves)
+	{
+		if (room.state.white.bannedMoves.includes(position))
+			drawBannedMove("#7f7f7f", position);
+		else
+			drawBannedMove("#000000", position);
+	}
+	for (const position of room.state.white.bannedMoves)
+	{
+		if (!room.state.black.bannedMoves.includes(position))
+			drawBannedMove("#ffffff", position);
+	}
 	if (room.state.black.proposedMove !== undefined)
 	{
 		drawStone("#0000007f", room.state.black.proposedMove);
@@ -186,6 +198,31 @@ function drawMoveMarker(colour: string, position: number)
 	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.ellipse(x * stoneSize + stoneOffset, y * stoneSize + stoneOffset, stoneOffset * 0.5, stoneOffset * 0.5, 0, 0, Math.PI * 2);
+	ctx.stroke();
+}
+
+function drawBannedMove(colour: string, position: number)
+{
+	const [x, y] = toVertex(position);
+	ctx.strokeStyle = "black";
+	ctx.fillStyle = colour;
+	ctx.beginPath();
+	const x0 = x * stoneSize + stoneOffset;
+	const y0 = y * stoneSize + stoneOffset;
+	ctx.lineTo(x0, y0 - 5);
+	ctx.lineTo(x0 + 5, y0 - 10);
+	ctx.lineTo(x0 + 10, y0 - 5);
+	ctx.lineTo(x0 + 5, y0);
+	ctx.lineTo(x0 + 10, y0 + 5);
+	ctx.lineTo(x0 + 5, y0 + 10);
+	ctx.lineTo(x0, y0 + 5);
+	ctx.lineTo(x0 - 5, y0 + 10);
+	ctx.lineTo(x0 - 10, y0 + 5);
+	ctx.lineTo(x0 - 5, y0);
+	ctx.lineTo(x0 - 10, y0 - 5);
+	ctx.lineTo(x0 - 5, y0 - 10);
+	ctx.lineTo(x0, y0 - 5);
+	ctx.fill();
 	ctx.stroke();
 }
 

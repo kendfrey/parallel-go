@@ -71,6 +71,9 @@ export class GameRoom extends Room<GameState>
 
 		try
 		{
+			if (this.state[player].bannedMoves.includes(position))
+				throw new Error();
+
 			this.board.makeMove(player === "black" ? 1 : -1, this.toVertex(position), opts);
 			this.state[player].proposedMove = position;
 		}
@@ -124,6 +127,8 @@ export class GameRoom extends Room<GameState>
 				this.board = bwBoard;
 				this.state.black.lastMove = this.state.black.proposedMove;
 				this.state.white.lastMove = this.state.white.proposedMove;
+				this.state.black.bannedMoves.clear();
+				this.state.white.bannedMoves.clear();
 			}
 			else
 			{
@@ -132,7 +137,8 @@ export class GameRoom extends Room<GameState>
 		}
 		catch (e)
 		{
-			// TODO
+			this.state.black.bannedMoves.push(this.state.black.proposedMove);
+			this.state.white.bannedMoves.push(this.state.white.proposedMove);
 		}
 		this.state.black.proposedMove = undefined;
 		this.state.white.proposedMove = undefined;
