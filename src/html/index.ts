@@ -12,6 +12,8 @@ const whitePlayer = document.getElementById("white-player") as HTMLSpanElement;
 const sitWhiteBtn = document.getElementById("sit-white") as HTMLButtonElement;
 const standWhiteBtn = document.getElementById("stand-white") as HTMLButtonElement;
 const passBtn = document.getElementById("pass") as HTMLButtonElement;
+const resumeBtn = document.getElementById("resume") as HTMLButtonElement;
+const score = document.getElementById("score") as HTMLSpanElement;
 const gameCanvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 
 newGameBtn.addEventListener("click", onNew);
@@ -22,6 +24,7 @@ sitWhiteBtn.addEventListener("click", () => onSitStand("sit", "white"));
 standWhiteBtn.addEventListener("click", () => onSitStand("stand", "white"));
 gameCanvas.addEventListener("click", onClick);
 passBtn.addEventListener("click", onPass);
+resumeBtn.addEventListener("click", onResume);
 
 const client = new Colyseus.Client();
 
@@ -53,6 +56,14 @@ function onPass()
 		return;
 
 	room.send("pass");
+}
+
+function onResume()
+{
+	if (room === undefined)
+		return;
+
+	room.send("resume");
 }
 
 function setupRoom(room: Colyseus.Room)
@@ -91,7 +102,14 @@ function update()
 	whitePlayer.textContent = room.state.white.nick;
 	sitWhiteBtn.style.display = room.state.white.player === undefined ? "" : "none";
 	standWhiteBtn.style.display = room.state.white.player === room.sessionId ? "" : "none";
-	passBtn.style.display = room.state.black.player === room.sessionId || room.state.white.player === room.sessionId ? "" : "none";
+
+	const playing = room.state.black.player === room.sessionId || room.state.white.player === room.sessionId;
+	const gameOver = room.state.black.territory.size + room.state.white.territory.size !== 0;
+	passBtn.style.display = playing && !gameOver ? "" : "none";
+	resumeBtn.style.display = playing && gameOver ? "" : "none";
+	const margin = room.state.black.territory.size - room.state.white.territory.size;
+	score.textContent = margin > 0 ? "B+" + margin : margin < 0 ? "W+" + -margin : "Draw";
+	score.style.display = gameOver ? "" : "none";
 
 	drawBoard();
 }

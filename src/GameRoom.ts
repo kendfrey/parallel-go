@@ -16,6 +16,7 @@ export class GameRoom extends Room<GameState>
 		this.onMessage("stand", (c, m) => this.onStand(c, m));
 		this.onMessage("click", (c, m) => this.onClick(c, m));
 		this.onMessage("pass", c => this.onPass(c));
+		this.onMessage("resume", c => this.onResume(c));
 
 		this.updateBoardState();
 	}
@@ -117,6 +118,15 @@ export class GameRoom extends Room<GameState>
 		this.state[player].proposedMove = -1;
 		this.attemptMove();
 		this.updateBoardState();
+	}
+
+	onResume(client: Client)
+	{
+		if (client.sessionId === this.state.black.player || client.sessionId === this.state.white.player)
+		{
+			this.countingBoard = undefined;
+			this.updateBoardState();
+		}
 	}
 
 	onJoin(client: Client, options: any, auth: any)
