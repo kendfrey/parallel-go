@@ -14,6 +14,7 @@ export class GameRoom extends Room<GameState>
 		this.onMessage("sit", (c, m) => this.onSit(c, m));
 		this.onMessage("stand", (c, m) => this.onStand(c, m));
 		this.onMessage("click", (c, m) => this.onClick(c, m));
+		this.onMessage("pass", c => this.onPass(c));
 
 		this.updateBoardState();
 	}
@@ -77,6 +78,21 @@ export class GameRoom extends Room<GameState>
 		{
 			this.state[player].proposedMove = undefined;
 		}
+		this.attemptMove();
+		this.updateBoardState();
+	}
+
+	onPass(client: Client)
+	{
+		let player: "black" | "white";
+		if (client.sessionId === this.state.black.player)
+			player = "black";
+		else if (client.sessionId === this.state.white.player)
+			player = "white";
+		else
+			return;
+
+		this.state[player].proposedMove = -1;
 		this.attemptMove();
 		this.updateBoardState();
 	}

@@ -11,6 +11,7 @@ const standBlackBtn = document.getElementById("stand-black") as HTMLButtonElemen
 const whitePlayer = document.getElementById("white-player") as HTMLSpanElement;
 const sitWhiteBtn = document.getElementById("sit-white") as HTMLButtonElement;
 const standWhiteBtn = document.getElementById("stand-white") as HTMLButtonElement;
+const passBtn = document.getElementById("pass") as HTMLButtonElement;
 const gameCanvas = document.getElementById("game-canvas") as HTMLCanvasElement;
 
 newGameBtn.addEventListener("click", onNew);
@@ -20,6 +21,7 @@ standBlackBtn.addEventListener("click", () => onSitStand("stand", "black"));
 sitWhiteBtn.addEventListener("click", () => onSitStand("sit", "white"));
 standWhiteBtn.addEventListener("click", () => onSitStand("stand", "white"));
 gameCanvas.addEventListener("click", onClick);
+passBtn.addEventListener("click", onPass);
 
 const client = new Colyseus.Client();
 
@@ -43,6 +45,14 @@ function onClick(e: MouseEvent)
 		return;
 
 	room.send("click", fromVertex(Math.floor(e.offsetX / stoneSize), Math.floor(e.offsetY / stoneSize)));
+}
+
+function onPass()
+{
+	if (room === undefined)
+		return;
+
+	room.send("pass");
 }
 
 function setupRoom(room: Colyseus.Room)
@@ -81,13 +91,14 @@ function update()
 	whitePlayer.textContent = room.state.white.nick;
 	sitWhiteBtn.style.display = room.state.white.player === undefined ? "" : "none";
 	standWhiteBtn.style.display = room.state.white.player === room.sessionId ? "" : "none";
+	passBtn.style.display = room.state.black.player === room.sessionId || room.state.white.player === room.sessionId ? "" : "none";
 
 	drawBoard();
 }
 
 const ctx = gameCanvas.getContext("2d") as CanvasRenderingContext2D;
 const size = 19;
-const stoneSize = 45;
+const stoneSize = 41;
 const stoneOffset = stoneSize * 0.5;
 
 function drawBoard()
