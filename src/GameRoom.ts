@@ -8,6 +8,7 @@ export class GameRoom extends Room<GameState>
 {
 	private board: Board = Board.fromDimensions(19);
 	private countingBoard?: Board;
+	private superko = new Map<number, Board[]>();
 
 	onCreate(options: any)
 	{
@@ -153,7 +154,14 @@ export class GameRoom extends Room<GameState>
 
 			if (diff !== null && diff.length === 0)
 			{
+				const hash = this.hash(bwBoard);
+				if (!this.superko.has(hash))
+					this.superko.set(hash, []);
+				if (this.superko.get(hash)!.some(b => bwBoard.diff(b)!.length === 0))
+					throw new Error();
+
 				this.board = bwBoard;
+				this.superko.get(hash)!.push(this.board);
 				this.state.black.lastMove = this.state.black.proposedMove;
 				this.state.white.lastMove = this.state.white.proposedMove;
 				this.state.black.bannedMoves.clear();
@@ -175,6 +183,33 @@ export class GameRoom extends Room<GameState>
 
 		this.state.black.proposedMove = undefined;
 		this.state.white.proposedMove = undefined;
+	}
+
+	hash(board: Board): number
+	{
+		let blackHash = 0;
+		let whiteHash = 0;
+		for (const row of board.signMap)
+		{
+			let blackRowHash = 0;
+			let whiteRowHash = 0;
+			for (const stone of row)
+			{
+				blackRowHash *= 2;
+				whiteRowHash *= 2;
+
+				if (stone === 1)
+					blackRowHash++;
+				else if (stone === -1)
+					whiteRowHash++;
+			}
+
+			blackHash *= 3;
+			whiteHash *= 3;
+			blackHash += blackRowHash;
+			whiteHash += whiteRowHash;
+		}
+		return blackHash ^ whiteHash;
 	}
 
 	updateBoardState()
