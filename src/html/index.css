@@ -1,6 +1,11 @@
 button
 {
-	width: 100px;
+	width: 80px;
+}
+
+#join button
+{
+	width: 100%;
 }
 
 #join, #game
@@ -12,4 +17,9 @@ button
 #join > *, #game > *
 {
 	margin-top: 10px;
+}
+
+#game > div
+{
+	height: 25px;
 }
