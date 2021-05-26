@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Parallel Go - About</title>
+</head>
+<body>
+	<h1>How To Play</h1>
+	<p>
+		To create a new game, enter a nickname and click New Game.
+		After creating the game, you can copy the game ID at the top of the page to send to your opponent and spectators.
+	</p>
+	<p>
+		To join a game, enter a nickname and enter the game ID you've been given into the Game ID field, then click Join.
+	</p>
+	<p>
+		After creating or joining a game, you may choose to play as black or white by clicking the Play button.
+		Otherwise, you can remain a spectator.
+	</p>
+	<p>
+		Play moves by clicking on the board.
+		Your move will appear on the board as semitransparent until your opponent also plays.
+	</p>
+	<p>
+		Points with an X in your colour or gray cannot be played on. An X with your opponent's colour is allowed.
+	</p>
+	<p>
+		Once both players pass and the game is over, the board enters counting mode.
+		From here, either player can mark dead stones or resume the game.
+		Click on a group of stones to mark them as dead or alive.
+	</p>
+	<h1>Rules</h1>
+	<p>
+		Parallel Go is a variant of Go where players choose moves simultaneously.
+		On each turn, once both players have selected a move, the moves are played together.
+		The game ends when both players pass simultaneously.
+	</p>
+	<h2>Illegal Moves</h2>
+	<p>
+		Each player's move must be a legal move in its own.
+		A non-passing move must place a stone on an empty intersection of the board, and the stone must end with at least one liberty.
+		Taking a ko is allowed, and suicide is not allowed. Passing is always allowed.
+	</p>
+	<p>
+		The two moves selected must commute with each other. That is, the order in which they are played should not affect the outcome.
+		If the selected moves conflict in any way, both players must select a different move.
+	</p>
+	<p>
+		If multiple conflicts happen during a single turn, every move is prohibited from being repeated until the next turn.
+		Points prohibited to black are marked with a black X, to white with a white X, and to both with a gray X.
+	</p>
+	<p>
+		The simplest conflict is two players attempting to play the same intersection.
+		Other conflicts are possible, such as both players throwing in to start the same ko, or a capturing race that ends with both groups in atari.
+	</p>
+	<h2>Superko</h2>
+	<p>
+		No ko rule is necessary in Parallel Go, because moves are not sequential.
+		It's still possible to repeat positions, so a superko rule is added to prevent repetition.
+	</p>
+	<p>
+		No turn can repeat a board position.
+		If the selected moves would repeat a previous position, they are treated as a conflict (prohibited until the next turn).
+	</p>
+	<p>
+		The superko rule applies even if one player passes.
+		The player who placed a stone is prohibited from selecting that move again.
+		The player who passed is not prohibited from passing again or making any legal move.
+	</p>
+	<h2>Scoring</h2>
+	<p>
+		This game is scored using a Chinese style.
+		Players receive one point for each living stone and one point for each surrounded intersection of territory.
+		Eyes in seki do score points. Intersections not completely surrounded by a single colour score no points.
+	</p>
+	<p>
+		Since neither player plays first, there is no komi. Because of this, draws are possible.
+	</p>
+</body>
+</html>
