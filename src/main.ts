@@ -11,4 +11,4 @@ const gameServer = new Server({ server: http.createServer(app) });
 
 gameServer.define("game", GameRoom);
 
-gameServer.listen(8000);
+gameServer.listen(Number(process.env.PORT ?? "80"));
