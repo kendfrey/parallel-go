@@ -48,6 +48,9 @@ function onClick(e: MouseEvent)
 		return;
 
 	room.send("click", fromVertex(Math.floor(e.offsetX / stoneSize), Math.floor(e.offsetY / stoneSize)));
+
+	// Help Heroku realize there is traffic so it doesn't idle.
+	fetch("/heroku.html");
 }
 
 function onPass()
